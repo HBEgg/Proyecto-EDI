@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewBag.Title = "BusquedaPaciente";
+}
+
+<h2>BusquedaPaciente</h2>
+@model Estructuras.Enfermosinfo
+    
+@using (Html.BeginForm())
+{
+    <p>
+        Buscar por nombre :@Html.TextBox("Nombre")
+        <input type="submit" value="Buscar" />
+    </p>
+}
+<table class="table">
+    <tr>
+        <th>
+            Nombre
+        </th>
+        <th>
+            Apellido
+        </th>
+        <th>
+            Dpi
+        </th>
+        <th>
+            Partida de nacimiento
+        </th>
+        <th>
+            Departamento
+        </th>
+        <th>
+            Municipio
+        </th>
+    </tr>
+    @if (Model != null)
+    {
+<tr>
+    <td>
+        @Html.DisplayFor(model => model.Nombre)
+    </td>
+    <td>
+        @Html.DisplayFor(model => model.Apellido)
+    </td>
+    <td>
+        @Html.DisplayFor(model => model.Dpi)
+    </td>
+    <td>
+        @Html.DisplayFor(model => model.PartidaN)
+    </td>
+    <td>
+        @Html.DisplayFor(model => model.Departamento)
+    </td>
+    <td>
+        @Html.DisplayFor(model => model.Municipio)
+    </td>
+</tr>
+    }
+</table>
+<input type="button"
+       value="Terminar Búsqueda"
+       onclick="location.href= '@Url.Action("Create", "Enfermos" )'" %>

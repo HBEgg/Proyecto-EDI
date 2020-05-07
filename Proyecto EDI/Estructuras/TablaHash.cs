@@ -10,10 +10,10 @@ namespace Estructuras
 {
     class TablaHash
     {
-        Dictionary<string, Enfermos> keyValues = new Dictionary<string, Enfermos>();
+        Dictionary<string, Enfermosinfo> keyValues = new Dictionary<string, Enfermosinfo>();
         Dictionary<string, string> Valores = new Dictionary<string, string>(); 
-        Enfermos Contagiado = null;
-        Enfermos Sospechosos = null;
+        Enfermosinfo Contagiado = null;
+        Enfermosinfo Sospechosos = null;
         string llave = " ";
         private object posibles;
 

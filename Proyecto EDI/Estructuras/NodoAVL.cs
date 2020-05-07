@@ -8,25 +8,36 @@ namespace Estructuras
 {
     class NodoAVL
     {
-        public Enfermos enfermos { get; set; }
+        public Enfermosinfo enfermos { get; set; }
         public int indice { get; set; }
         public NodoAVL Izquierdo { get; set; }
         public NodoAVL Derecho { get; set; }
         public NodoAVL Padre { get; set; }
+        public int altura { get; set; }
+
         public NodoAVL() //constructores
         {
 
         }
-        public NodoAVL(Enfermos enfermosinfo)
+        public NodoAVL(Enfermosinfo enfermos)
         {
-            this.enfermos = enfermosinfo;
+            this.enfermos = enfermos;
+            this.indice = enfermos.id; 
         }
-        public NodoAVL(Enfermos enfermosinfo, NodoAVL padre, NodoAVL izquierdo, NodoAVL derecho)
+        public NodoAVL(Enfermosinfo enfermos, NodoAVL anterior)
         {
-            this.enfermos = enfermosinfo;
+            this.enfermos = enfermos;
+            this.indice = enfermos.id;
+            this.Padre = anterior; 
+
+        }
+        public NodoAVL(Enfermosinfo enfermos, NodoAVL padre, NodoAVL izquierdo, NodoAVL derecho)
+        {
+            this.enfermos = enfermos;
             this.Derecho = derecho;
             this.Izquierdo = izquierdo;
-            this.Padre = padre; 
+            this.Padre = padre;
+            this.indice = enfermos.id;
         }
         //Verificando las condiciones de un arbol 
         public bool Raiz()
