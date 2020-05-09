@@ -58,6 +58,7 @@ namespace Estructuras
                 Raiz = new NodoAVL<T>(item);
             }
         }
+
         public void CreaArbol(List<T> listaenfermos, Comparison<T> comparison)
         {
             foreach (var item in listaenfermos)

@@ -97,22 +97,22 @@ namespace Proyecto_EDI.Controllers
                 new DotNet.Highcharts.Options.Series
                 {
                     Name = "Ingreso de Contagiados",
-                    Data = new DotNet.Highcharts.Helpers.Data(new object[]{25}) //se puede acceder a lo que contiene la lista contagiados, pero se puede hacer una lista de contagiados etc
+                    Data = new DotNet.Highcharts.Helpers.Data(new object[]{Storage.Instancia.CantidadContagiados}) //se puede acceder a lo que contiene la lista contagiados, pero se puede hacer una lista de contagiados etc
                 },
                 new DotNet.Highcharts.Options.Series()
                 {
                     Name = "Ingreso de Sospechosos",
-                    Data = new DotNet.Highcharts.Helpers.Data (new object[]{56}) //se agrega la cantidad de recuperados que hay recordar que se puede referenciar los datos que ya se han obtenido
+                    Data = new DotNet.Highcharts.Helpers.Data (new object[]{Storage.Instancia.CantidadSospechosos}) //se agrega la cantidad de recuperados que hay recordar que se puede referenciar los datos que ya se han obtenido
                 },
                 new DotNet.Highcharts.Options.Series()
                 {
                     Name = "Sospechosos Positivos",
-                    Data = new DotNet.Highcharts.Helpers.Data (new object[]{59}) //se agrega la cantidad de recuperados que hay recordar que se puede referenciar los datos que ya se han obtenido
+                    Data = new DotNet.Highcharts.Helpers.Data (new object[]{Storage.Instancia.CantidadContagiados}) //se agrega la cantidad de recuperados que hay recordar que se puede referenciar los datos que ya se han obtenido
                 },
                 new DotNet.Highcharts.Options.Series()
                 {
                     Name = "Egresados (recuperados)",
-                    Data = new DotNet.Highcharts.Helpers.Data (new object[]{23}) //se agrega la cantidad de recuperados que hay recordar que se puede referenciar los datos que ya se han obtenido
+                    Data = new DotNet.Highcharts.Helpers.Data (new object[]{Storage.Instancia.CantidadRecuperados}) //se agrega la cantidad de recuperados que hay recordar que se puede referenciar los datos que ya se han obtenido
                 }
             });
 
@@ -123,25 +123,34 @@ namespace Proyecto_EDI.Controllers
         [HttpPost]
         public ActionResult Create(Enfermos enfermos)
         {
-            
+
             //Enfermos[] datosenfermo = ListaContagiado.ToArray();
-            
-            ListaContagiado.Add(enfermos);
+
+            //ListaContagiado.Add(enfermos);//
+            if (Storage.Instancia.InfoEnfermosNombre.ContainsKey(enfermos.Nombre))
+            {
+                return View();
+            }
             arbolpaciente.Add(enfermos, arbolpaciente.Raiz, Enfermos.CompararPorNombre);
-            if (enfermos.Save())
-            {
-                return RedirectToAction("Create");
-            }
-            else
-            {
-                return View(enfermos);
-            }
+            enfermos.Estado = "Sospechoso";
+            Storage.Instancia.InfoEnfermosNombre.Add(enfermos.Nombre, enfermos);
+            Storage.Instancia.InfoEnfermosApellido.Add(enfermos.Apellido, enfermos);
+            Storage.Instancia.InfoEnfermosDPI.Add(enfermos.Dpi, enfermos);
+            Storage.Instancia.CantidadSospechosos++;
+            return RedirectToAction("Create");
+            //if (enfermos.Save())
+            //{
+            //}
+            //else
+            //{
+            //    return View(enfermos);
+            //}
         }
 
         [HttpPost]
         public ActionResult Simulacion(Simulacion sim, Enfermos enfermos)
         {
-            int contador=0; 
+            int contador = 0; 
             bool Contagiado = false;
             bool Sospechoso = true;
             if (Sospechoso == true)
@@ -161,6 +170,7 @@ namespace Proyecto_EDI.Controllers
             //Dictionary<string, string> diccionario = new Dictionary<string, string>();
             //diccionario.Add(enfermos.Nombre, enfermos.Sintoma); // uno sirve de clave y el otro de valor, cambiarlo por int para poder ingresar lel valor como la hora de ingreso para que sea mas facil su reconocimiento
         }
+
         [HttpPost]
         public ActionResult Simulation(FormCollection collection)
         {
@@ -177,23 +187,19 @@ namespace Proyecto_EDI.Controllers
                     Fecha = int.Parse(collection["Fecha"]) 
                 };
                 Listainformacion.Add(enfermosinfo);
-                if (enfermosinfo.Save())
-                {
-                    NodoCola nvacola = new NodoCola()
-                    {
-                        Departamento = collection["Departamento"],
-                        Edad = int.Parse(collection["Edad"]), 
-                        Municipio = collection["Municipio"], 
-                        Hora = collection["Hora"], 
-                        Fecha = collection["Fecha"]
-                    };
-                    NodoCola informacion = Cola.Mostrar();
-                    NodoCola informaciones = Cola.MaxHeap();
-                    NodoCola information = Cola.Heap();
-                    NodoCola informacion2 = Cola.HeapSort();
-                    return RedirectToAction("Create");
-                }
-                else
+                //if (enfermosinfo.Save())
+                //{
+                //    NodoCola nvacola = new NodoCola()
+                //    {
+                //        Departamento = collection["Departamento"],
+                //        Edad = int.Parse(collection["Edad"]), 
+                //        Municipio = collection["Municipio"], 
+                //        Hora = collection["Hora"], 
+                //        Fecha = collection["Fecha"]
+                //    };
+                //    return RedirectToAction("Create");
+                //}
+                //else
                 {
                     return View(enfermosinfo);
                 }
@@ -206,26 +212,44 @@ namespace Proyecto_EDI.Controllers
             }
         }
         // GET: Enfermos/Edit/5
-        public ActionResult BusquedaPaciente(string nombre, Enfermosinfo enfermosinfo, FormCollection collection)
+        public ActionResult BusquedaPaciente(string nombre, string apellido, string DPI)
         {
            
            // enfermosinfo.Find(x => x.)
-            if (String.IsNullOrEmpty(nombre))
+            if (String.IsNullOrEmpty(nombre) && String.IsNullOrEmpty(apellido) && String.IsNullOrEmpty(DPI))
             {
-                return View();
+                if (Storage.Instancia.InfoEnfermosNombre.Count == 0)
+                {
+                    return RedirectToAction("Create");
+                }
+                return View(Storage.Instancia.InfoEnfermosNombre.Values.ToList());
+            }
+            else if (!String.IsNullOrEmpty(nombre))
+            {
+                //var paciente = arbolpaciente.Buscar(new Enfermos() { Nombre = nombre }, arbolpaciente.Raiz, Enfermos.CompararPorNombre);
+                if (Storage.Instancia.InfoEnfermosNombre.ContainsKey(nombre))
+                {
+                    return View(Storage.Instancia.InfoEnfermosNombre.Values.Where(x => x.Nombre == nombre));
+                }
+            }
+            else if (!String.IsNullOrEmpty(apellido))
+            {
+                //var paciente = arbolpaciente.Buscar(new Enfermos() { Apellido = apellido }, arbolpaciente.Raiz, Enfermos.CompararPorApellido
+                if (Storage.Instancia.InfoEnfermosApellido.ContainsKey(apellido))
+                {
+                    return View(Storage.Instancia.InfoEnfermosApellido.Values.Where(x => x.Apellido == apellido));
+                }
             }
             else
             {
-                var paciente = arbolpaciente.Buscar(new Enfermos() { Nombre = nombre }, arbolpaciente.Raiz, Enfermos.CompararPorNombre);
-                if (paciente != default)
+                //var paciente = arbolpaciente.Buscar(new Enfermos() { Dpi = DPI }, arbolpaciente.Raiz, Enfermos.CompararPorDPI);
+                if (Storage.Instancia.InfoEnfermosDPI.ContainsKey(DPI))
                 {
-                   return View(paciente);
-                }
-                else
-                {
-                    return View(new Enfermos());
+                    var paciente = Storage.Instancia.InfoEnfermosDPI[DPI];
+                    return View(Storage.Instancia.InfoEnfermosDPI.Values.Where(x=>x.Dpi == DPI));
                 }
             }
+            return View(Storage.Instancia.InfoEnfermosNombre.Values.ToList());
         }
         Enfermosinfo buscarenarbol(int indice)
         {
@@ -242,6 +266,21 @@ namespace Proyecto_EDI.Controllers
            
             //return buscarenarbol(indice);
             //throw new NotImplementedException("Asegúrese de que hay pacientes");
+        }
+
+        public ActionResult CambiarAContagiado(string nombre)
+        {
+            if (Storage.Instancia.InfoEnfermosNombre[nombre].Estado == "Sospechoso")
+            {
+                Storage.Instancia.InfoEnfermosNombre[nombre].Estado = "Contagiado";
+                Storage.Instancia.CantidadContagiados++;
+            }
+            else
+            {
+                Storage.Instancia.InfoEnfermosNombre[nombre].Estado = "Recuperado";
+                Storage.Instancia.CantidadRecuperados++;
+            }
+            return RedirectToAction("BusquedaPaciente", new { nombre = nombre });
         }
 
         public ActionResult Edit(int id)

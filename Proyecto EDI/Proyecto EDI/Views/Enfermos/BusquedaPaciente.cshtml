@@ -1,4 +1,4 @@
-﻿@model Proyecto_EDI.Models.Enfermos
+﻿@model IEnumerable<Proyecto_EDI.Models.Enfermos>
 
 @{
     ViewBag.Title = "BusquedaPaciente";
@@ -10,6 +10,11 @@
 {
     <p>
         Buscar por nombre :@Html.TextBox("Nombre")
+        <br />
+        Buscar por apellido: @Html.TextBox("Apellido")
+        <br />
+        Buscar por DPI: @Html.TextBox("DPI")
+        <br />
         <input type="submit" name="Value"value="Buscar" />
     </p>
 }
@@ -34,27 +39,47 @@
         <th>
             Municipio
         </th>
+        <th>
+            Estado
+        </th>
+        <th></th>
     </tr>
-<tr>
-    <td>
-        @Html.DisplayFor(model => model.Nombre)
-    </td>
-    <td>
-        @Html.DisplayFor(model => model.Apellido)
-    </td>
-    <td>
-        @Html.DisplayFor(model => model.Dpi)
-    </td>
-    <td>
-        @Html.DisplayFor(model => model.PartidaN)
-    </td>
-    <td>
-        @Html.DisplayFor(model => model.Departamento)
-    </td>
-    <td>
-        @Html.DisplayFor(model => model.Municipio)
-    </td>
-</tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Apellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dpi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PartidaN)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Departamento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Municipio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Estado)
+            </td>
+            <td>
+                @if (item.Estado == "Sospechoso")
+                {
+                    @Html.ActionLink("Cambiar a Contagiado", "CambiarAContagiado", new { nombre = item.Nombre })
+                }
+                else if (item.Estado == "Contagiado")
+                {
+                    @Html.ActionLink("Cambiar a Recuperado", "CambiarAContagiado", new { nombre = item.Nombre })
+                }
+            </td>
+        </tr>
+    }
 </table>
 <input type="button"
        value="Terminar Búsqueda"

@@ -53,20 +53,5 @@ namespace Estructuras
             this.Departamento = departamento;
             this.Municipio = municipio;
         }
-
-        public bool Save()
-        {
-            try
-            {
-                Storage.Instancia.Listainformacion.Add(this);
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-            throw new NotImplementedException();
-        }
     }
 }

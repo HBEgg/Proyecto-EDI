@@ -23,5 +23,11 @@ namespace Proyecto_EDI.Helpers
         }
         public List<Enfermos> ListaContagiado = new List<Enfermos>();
         public List<Enfermosinfo> Listainformacion = new List<Enfermosinfo>();
+        public int CantidadSospechosos = 0;
+        public int CantidadRecuperados = 0;
+        public int CantidadContagiados = 0;
+        public Dictionary<string, Enfermos> InfoEnfermosNombre = new Dictionary<string, Enfermos>();
+        public Dictionary<string, Enfermos> InfoEnfermosApellido = new Dictionary<string, Enfermos>();
+        public Dictionary<string, Enfermos> InfoEnfermosDPI = new Dictionary<string, Enfermos>();
     }
 }

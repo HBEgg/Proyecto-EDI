@@ -19,6 +19,7 @@ namespace Proyecto_EDI.Models
         public string Dpi { get; set; }
         public string  PartidaN { get; set; }
         public string Sintoma { get; set; }
+        public string Estado { get; set; }
         public string CContagio { get; set; }  //causa de contagio
         //public int Fecha { get; set; }
         public int Hora { get; set; }
@@ -58,18 +59,14 @@ namespace Proyecto_EDI.Models
             return enfermo1.Nombre.CompareTo(enfermo2.Nombre);
         };
 
-
-        public Enfermos(int id, string nombre, string apellido, string dpi, string partidan, string departamento, string municipio)
+        public static Comparison<Enfermos> CompararPorApellido = delegate (Enfermos enfermo1, Enfermos enfermo2)
         {
-            this.id = id;
-            this.Nombre = nombre;
-            this.Apellido = apellido;
-            this.Dpi = dpi;
-            this.PartidaN = partidan;
-            this.Departamento = departamento;
-            this.Municipio = municipio;
-        }
-         //Estructuras.Enfermosinfo
-            
+            return enfermo1.Apellido.CompareTo(enfermo2.Apellido);
+        };
+
+        public static Comparison<Enfermos> CompararPorDPI = delegate (Enfermos enfermo1, Enfermos enfermo2)
+        {
+            return enfermo1.Dpi.CompareTo(enfermo2.Dpi);
+        };
     }
 }
