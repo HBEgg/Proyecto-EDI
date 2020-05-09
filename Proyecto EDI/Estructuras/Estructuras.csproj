@@ -46,8 +46,10 @@
     <Compile Include="Enfermosinfo.cs" />
     <Compile Include="NodoAVL.cs" />
     <Compile Include="NodoCola.cs" />
+    <Compile Include="NvacolaP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Simulacion.cs" />
+    <Compile Include="Storage.cs" />
     <Compile Include="TablaHash.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

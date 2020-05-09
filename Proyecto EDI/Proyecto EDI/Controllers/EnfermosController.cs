@@ -6,22 +6,25 @@ using System.Web.Mvc;
 using Proyecto_EDI.Helpers;
 using Proyecto_EDI.Models;
 using Estructuras;
-using DotNet.Highcharts; 
+using DotNet.Highcharts;
+using System.IO;
 namespace Proyecto_EDI.Controllers
 {
     public class EnfermosController : Controller
     {
+       // public static Estructuras.Cola<Enfermosinfo> cola = new Estructuras.Cola<Enfermosinfo>();
         public static List<Enfermos> ListaContagiado = new List<Enfermos>();
-        //public static ArbolAVL<Enfermos> listaenfermos = new Estructuras.ArbolAVL<Enfermos>
+        public static List<Enfermosinfo> Listainformacion = new List<Enfermosinfo>();
+        public static ArbolAVL<Enfermosinfo> listaenfermos = new Estructuras.ArbolAVL<Enfermosinfo>();
         public List<Simulacion> simulacions = new List<Simulacion>();
-        public static Estructuras.ArbolAVL<Paciente> arbolpaciente = new Estructuras.ArbolAVL<Paciente>();
-        //delegate void delenfermo(Enfermos enfermos,);
+        public static Estructuras.ArbolAVL<Enfermos> arbolpaciente = new Estructuras.ArbolAVL<Enfermos>();
+        delegate void delenfermo(Enfermos enfermos);
         // GET: Enfermos
         public ActionResult Index()
         {
             //var Delenfermo = new delenfermo(arbolpaciente.Add());
             
-            return View(Storage.Instancia.ListaContagiado);
+            return View(Helpers.Storage.Instancia.ListaContagiado);
         }
 
         // GET: Enfermos/Details/5
@@ -33,17 +36,17 @@ namespace Proyecto_EDI.Controllers
         // GET: Enfermos/Create
         public ActionResult Create()
         {
-            
             var list = new List<string>() { "Capital", "Quetzaltenango", "Escuintla", "Oriente","Petén" };
             ViewBag.list = list;
-            var list2 = new List<string>() { "Fraijanes", "Los esclavos", "Villa santorini" };
-            ViewBag.list2 = list2;
-            //if (ViewBag.list == "Capital")
-            //{
-            //    //Simulacion del examen 
+            //var list2 = new List<string>() { "Fraijanes", "Los esclavos", "Villa santorini" };
+            //ViewBag.list2 = list2;
+            ////if (ViewBag.list == "Capital")
+            ////{
+            ////    //Simulacion del examen 
             
             return View();
         }
+
         public ActionResult Graficos()
         {
             Highcharts ColumnChart = new Highcharts("ColumnChart");
@@ -94,22 +97,22 @@ namespace Proyecto_EDI.Controllers
                 new DotNet.Highcharts.Options.Series
                 {
                     Name = "Ingreso de Contagiados",
-                    Data = new DotNet.Highcharts.Helpers.Data(new object[]{ListaContagiado}) //se puede acceder a lo que contiene la lista contagiados, pero se puede hacer una lista de contagiados etc
+                    Data = new DotNet.Highcharts.Helpers.Data(new object[]{25}) //se puede acceder a lo que contiene la lista contagiados, pero se puede hacer una lista de contagiados etc
                 },
                 new DotNet.Highcharts.Options.Series()
                 {
                     Name = "Ingreso de Sospechosos",
-                    Data = new DotNet.Highcharts.Helpers.Data (new object[]{14,56,59,23,32,98,56,}) //se agrega la cantidad de recuperados que hay recordar que se puede referenciar los datos que ya se han obtenido
+                    Data = new DotNet.Highcharts.Helpers.Data (new object[]{56}) //se agrega la cantidad de recuperados que hay recordar que se puede referenciar los datos que ya se han obtenido
                 },
                 new DotNet.Highcharts.Options.Series()
                 {
                     Name = "Sospechosos Positivos",
-                    Data = new DotNet.Highcharts.Helpers.Data (new object[]{14,56,59,23,32,98,56}) //se agrega la cantidad de recuperados que hay recordar que se puede referenciar los datos que ya se han obtenido
+                    Data = new DotNet.Highcharts.Helpers.Data (new object[]{59}) //se agrega la cantidad de recuperados que hay recordar que se puede referenciar los datos que ya se han obtenido
                 },
                 new DotNet.Highcharts.Options.Series()
                 {
                     Name = "Egresados (recuperados)",
-                    Data = new DotNet.Highcharts.Helpers.Data (new object[]{14,56,59,23,32,98,56}) //se agrega la cantidad de recuperados que hay recordar que se puede referenciar los datos que ya se han obtenido
+                    Data = new DotNet.Highcharts.Helpers.Data (new object[]{23}) //se agrega la cantidad de recuperados que hay recordar que se puede referenciar los datos que ya se han obtenido
                 }
             });
 
@@ -121,9 +124,10 @@ namespace Proyecto_EDI.Controllers
         public ActionResult Create(Enfermos enfermos)
         {
             
-            Enfermos[] datosenfermo = ListaContagiado.ToArray();
+            //Enfermos[] datosenfermo = ListaContagiado.ToArray();
             
             ListaContagiado.Add(enfermos);
+            arbolpaciente.Add(enfermos, arbolpaciente.Raiz, Enfermos.CompararPorNombre);
             if (enfermos.Save())
             {
                 return RedirectToAction("Create");
@@ -132,64 +136,24 @@ namespace Proyecto_EDI.Controllers
             {
                 return View(enfermos);
             }
-            
-            //return RedirectToAction("Create");
-            //Enfermos[] enfermoscont = ListaContagiado.ToArray();
-            //try
-            //{
-            //    var contagiado = new Enfermos
-            //    {
-            //        Nombre = collection["Nombre"],
-            //        Apellido = collection["Apellido"],
-            //        Departamento = collection["Departamento"],
-            //        Municipio = collection["Municipio"],
-            //        Dpi = Convert.ToInt32(collection["DPI"]),
-            //        PartidaN = Convert.ToInt32(collection["Partida de nacimiento"]),
-            //        Fecha = Convert.ToInt32(collection["Fecha de entrada"]),
-            //        Edad = Convert.ToInt32(collection["Edad"]),
-            //        Hora = Convert.ToInt32(collection["Hora de entrada"])
-            //    };
-            //    ListaContagiado.Add(contagiado);
-            //    if (contagiado.Save())
-            //    {
-            //        return RedirectToAction("Index");
-            //    }
-            //    else
-            //    {
-            //        return View(contagiado);
-            //    }
-            //}
-            //catch 
-            //{
-            //    return View();
-               
-            //}
-        
         }
+
+        [HttpPost]
         public ActionResult Simulacion(Simulacion sim, Enfermos enfermos)
         {
-            int ViajeE = 0;
-            int reusosp = 0;
+            int contador=0; 
             bool Contagiado = false;
             bool Sospechoso = true;
             if (Sospechoso == true)
             {
                 sim.obtenerinfo();
-                //if (enfermos.CContagio == "Viaje a Europa")
-                //{
-                //    ViajeE += 5;
-                //}
-                //if (enfermos.CContagio == "Reunión con sospechosos")
-                //{
-                //    reusosp += 10; 
-                //}
-                //enfermos.CContagio = " "+ enfermos.CContagio;
+                sim.ObtenEdad();
+                contador++;
             }
-            if (enfermos.Edad >= 60)
+            else
             {
-              
-                sim.Contagiado();
-                Console.WriteLine("Pertenece a la tercera edad"); //agregar la simulacion de el examen y definir las edades en este controlador 
+                sim.obtenerinfo();
+                sim.ObtenEdad();
             }
             sim.Contagiado();
             return RedirectToAction("Create");
@@ -197,34 +161,87 @@ namespace Proyecto_EDI.Controllers
             //Dictionary<string, string> diccionario = new Dictionary<string, string>();
             //diccionario.Add(enfermos.Nombre, enfermos.Sintoma); // uno sirve de clave y el otro de valor, cambiarlo por int para poder ingresar lel valor como la hora de ingreso para que sea mas facil su reconocimiento
         }
-        // GET: Enfermos/Edit/5
-        public ActionResult BusquedaPaciente(string nombre)
+        [HttpPost]
+        public ActionResult Simulation(FormCollection collection)
         {
-            
+            HashSet<Enfermosinfo> codigo = new HashSet<Enfermosinfo>();
+            Enfermosinfo[] enfermost = Listainformacion.ToArray(); 
+            try
+            {
+                var enfermosinfo = new Enfermosinfo()
+                {
+                    Edad = int.Parse(collection["Edad"]),
+                    Departamento = collection["Departamento"],
+                    Municipio = collection["Municipio"],
+                    Hora = int.Parse(collection["Hora"]),
+                    Fecha = int.Parse(collection["Fecha"]) 
+                };
+                Listainformacion.Add(enfermosinfo);
+                if (enfermosinfo.Save())
+                {
+                    NodoCola nvacola = new NodoCola()
+                    {
+                        Departamento = collection["Departamento"],
+                        Edad = int.Parse(collection["Edad"]), 
+                        Municipio = collection["Municipio"], 
+                        Hora = collection["Hora"], 
+                        Fecha = collection["Fecha"]
+                    };
+                    NodoCola informacion = Cola.Mostrar();
+                    NodoCola informaciones = Cola.MaxHeap();
+                    NodoCola information = Cola.Heap();
+                    NodoCola informacion2 = Cola.HeapSort();
+                    return RedirectToAction("Create");
+                }
+                else
+                {
+                    return View(enfermosinfo);
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        // GET: Enfermos/Edit/5
+        public ActionResult BusquedaPaciente(string nombre, Enfermosinfo enfermosinfo, FormCollection collection)
+        {
+           
+           // enfermosinfo.Find(x => x.)
             if (String.IsNullOrEmpty(nombre))
             {
                 return View();
             }
             else
             {
-                Enfermos encontrados = buscarenarbol(arbolpaciente.Buscar(nombre));
-                return View(encontrados);
+                var paciente = arbolpaciente.Buscar(new Enfermos() { Nombre = nombre }, arbolpaciente.Raiz, Enfermos.CompararPorNombre);
+                if (paciente != default)
+                {
+                   return View(paciente);
+                }
+                else
+                {
+                    return View(new Enfermos());
+                }
             }
         }
-
-        
-        Enfermos buscarenarbol(int indice)
+        Enfermosinfo buscarenarbol(int indice)
         {
-            
-            foreach (var item in ListaContagiado)
+           
+            foreach (var item in Listainformacion)
             {
-                if (item.id == indice)
+                if (item.Nombre == Convert.ToString(indice)) 
                 {
+                     //arbolpaciente.CreaArbol(Listainformacion);
                     return item; 
                 }
-                return new Enfermos(0,"No existe entre los pacientes registrados", "", "", "", "", "");
             }
-            throw new NotImplementedException();
+            return new Enfermosinfo(0, "No existe entre los pacientes registrados", "", "", "", "", "");
+           
+            //return buscarenarbol(indice);
+            //throw new NotImplementedException("Asegúrese de que hay pacientes");
         }
 
         public ActionResult Edit(int id)
@@ -236,16 +253,7 @@ namespace Proyecto_EDI.Controllers
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
         {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+                return View(); 
         }
 
         // GET: Enfermos/Delete/5

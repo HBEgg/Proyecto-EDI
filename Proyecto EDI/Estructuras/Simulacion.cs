@@ -9,11 +9,13 @@ namespace Estructuras
 {
     public class Simulacion
     {
-        
+        public static NodoCola nodo = new NodoCola(); 
         public static List<Enfermosinfo> listaenfermos = new List<Enfermosinfo>();
+        public static List<Enfermosinfo>.Enumerator listaenf = new List<Enfermosinfo>.Enumerator();
         int ViajeE = 0; int ReuSosp = 0; int ConocidoC = 0; int Famcont = 0;
         public int obtenerinfo()
         {
+            listaenfermos.GetEnumerator();
             listaenfermos.Add(enfermos);
             if (enfermos.CContagio == "Viaje a Europa" )
             {
@@ -56,7 +58,7 @@ namespace Estructuras
         }
         public bool Contagiado()
         {
-            
+            int contador=0; 
             bool viajeE = false, ConocidoR = false, Familiarcont = false, reunionsosp = false;
             int probabilidadb = 5;
             int viaje = 10;
@@ -67,6 +69,20 @@ namespace Estructuras
             bool Contagiado = false;
             if (Contagiado == false)
             {
+                contador++;
+                //NodoCola contagiado = new NodoCola
+                //{
+                //    Departamento = this.Departamento
+                //};
+                //NodoCola nvonodo = new NodoCola
+                //{
+
+                //    Edad = primero.Edad,
+                //    Municipio = primero.Municipio,
+                //    Departamento = primero.Departamento,
+                //    Hora = primero.Hora,
+                //    Fecha = primero.Fecha
+                //};
                 return false;
             }
             else

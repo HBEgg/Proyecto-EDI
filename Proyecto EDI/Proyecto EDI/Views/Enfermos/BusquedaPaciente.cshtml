@@ -1,18 +1,19 @@
-﻿
+﻿@model Proyecto_EDI.Models.Enfermos
+
 @{
     ViewBag.Title = "BusquedaPaciente";
 }
 
 <h2>BusquedaPaciente</h2>
-@model Estructuras.Enfermosinfo
     
-@using (Html.BeginForm())
+@using (Html.BeginForm("BusquedaPaciente", "Enfermos", FormMethod.Get))
 {
     <p>
         Buscar por nombre :@Html.TextBox("Nombre")
-        <input type="submit" value="Buscar" />
+        <input type="submit" name="Value"value="Buscar" />
     </p>
 }
+
 <table class="table">
     <tr>
         <th>
@@ -34,8 +35,6 @@
             Municipio
         </th>
     </tr>
-    @if (Model != null)
-    {
 <tr>
     <td>
         @Html.DisplayFor(model => model.Nombre)
@@ -56,7 +55,6 @@
         @Html.DisplayFor(model => model.Municipio)
     </td>
 </tr>
-    }
 </table>
 <input type="button"
        value="Terminar Búsqueda"

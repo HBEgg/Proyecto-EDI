@@ -4,10 +4,11 @@ using System.Linq;
 using System.Web;
 using Proyecto_EDI.Helpers;
 using System.ComponentModel.DataAnnotations;
+using Estructuras;
 
 namespace Proyecto_EDI.Models
 {
-    public class Enfermos
+    public class Enfermos : IComparable
     {
         [Required]
         public string Nombre { get; set; }
@@ -27,11 +28,18 @@ namespace Proyecto_EDI.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{yyyy-MM-dd}", ApplyFormatInEditMode =true)]
         public System.DateTime Fecha { get; set; }
+        public object enfermosinfo { get; private set; }
+
+        public Enfermos()
+        {
+
+        }
         public bool Save()
         {
             try
             {
-                Storage.Instancia.ListaContagiado.Add(this);
+                Helpers.Storage.Instancia.ListaContagiado.Add(this);
+                
                 return true;
             }
             catch 
@@ -39,10 +47,18 @@ namespace Proyecto_EDI.Models
                 return false;
             }
         }
-        public Enfermos()
-        {
 
+        public int CompareTo(object obj)
+        {
+            return Nombre.CompareTo(((Enfermos)obj).Nombre);
         }
+
+        public static Comparison<Enfermos> CompararPorNombre = delegate (Enfermos enfermo1, Enfermos enfermo2)
+        {
+            return enfermo1.Nombre.CompareTo(enfermo2.Nombre);
+        };
+
+
         public Enfermos(int id, string nombre, string apellido, string dpi, string partidan, string departamento, string municipio)
         {
             this.id = id;
@@ -53,5 +69,7 @@ namespace Proyecto_EDI.Models
             this.Departamento = departamento;
             this.Municipio = municipio;
         }
+         //Estructuras.Enfermosinfo
+            
     }
 }

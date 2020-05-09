@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Estructuras
 {
-    class NodoCola
+    public class NodoCola
     {
-        public string Nombre;
-        public string Apellido;
-        public string Dpi;
-        public string PartidaN; 
+        public int Edad; 
+        public string Hora;
+        public string Fecha;
+        public string Municipio; 
         public string Departamento;
         public NodoCola Sgte; 
     }

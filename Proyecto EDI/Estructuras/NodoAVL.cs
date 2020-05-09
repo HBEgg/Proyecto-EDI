@@ -6,39 +6,39 @@ using System.Threading.Tasks;
 
 namespace Estructuras
 {
-    class NodoAVL
+    public class NodoAVL<T>
     {
-        public Enfermosinfo enfermos { get; set; }
+        public T Enfermo { get; set; }
         public int indice { get; set; }
-        public NodoAVL Izquierdo { get; set; }
-        public NodoAVL Derecho { get; set; }
-        public NodoAVL Padre { get; set; }
+        public NodoAVL<T> Izquierdo { get; set; }
+        public NodoAVL<T> Derecho { get; set; }
+        public NodoAVL<T> Padre { get; set; }
         public int altura { get; set; }
 
-        public NodoAVL() //constructores
+        /// <summary>
+        /// Constructores
+        /// </summary>
+        /// <param name="enfermo"></param>
+        public NodoAVL(T enfermo)
         {
+            this.Enfermo = enfermo;
+        }
+        //public NodoAVL(Enfermosinfo enfermos, NodoAVL anterior)
+        //{
+        //    this.Enfermo = enfermos;
+        //    this.indice = enfermos.id;
+        //    this.Padre = anterior; 
 
-        }
-        public NodoAVL(Enfermosinfo enfermos)
-        {
-            this.enfermos = enfermos;
-            this.indice = enfermos.id; 
-        }
-        public NodoAVL(Enfermosinfo enfermos, NodoAVL anterior)
-        {
-            this.enfermos = enfermos;
-            this.indice = enfermos.id;
-            this.Padre = anterior; 
+        //}
+        //public NodoAVL(Enfermosinfo enfermos, NodoAVL padre, NodoAVL izquierdo, NodoAVL derecho)
+        //{
+        //    this.Enfermo = enfermos;
+        //    this.Derecho = derecho;
+        //    this.Izquierdo = izquierdo;
+        //    this.Padre = padre;
+        //    this.indice = enfermos.id;
+        //}
 
-        }
-        public NodoAVL(Enfermosinfo enfermos, NodoAVL padre, NodoAVL izquierdo, NodoAVL derecho)
-        {
-            this.enfermos = enfermos;
-            this.Derecho = derecho;
-            this.Izquierdo = izquierdo;
-            this.Padre = padre;
-            this.indice = enfermos.id;
-        }
         //Verificando las condiciones de un arbol 
         public bool Raiz()
         {
@@ -86,7 +86,7 @@ namespace Estructuras
         }
         public bool SHPacientes()
         {
-            if (enfermos != null)
+            if (Enfermo != null)
             {
                 return true;
             }

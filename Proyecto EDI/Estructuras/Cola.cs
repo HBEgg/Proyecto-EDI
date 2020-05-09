@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Estructuras
 {
-    class Cola
+    public class Cola
     {
         public NodoCola primero;
         public NodoCola Ultimo; 
@@ -16,28 +16,30 @@ namespace Estructuras
             primero = null;
             Ultimo = null; 
         }
-        public NodoCola pop()
+        public NodoCola Pop()
         {
             NodoCola auxiliar = new NodoCola
             {
-                Nombre = primero.Nombre,
-                Apellido = primero.Apellido,
-                Dpi = primero.Dpi,
-                PartidaN = primero.PartidaN,
-                Departamento = primero.Departamento
+                Edad = primero.Edad,
+                Municipio = primero.Municipio,
+                Departamento = primero.Departamento,
+                Hora = primero.Hora, 
+                Fecha = primero.Fecha
+                
+                
             };
             primero = primero.Sgte;
             return auxiliar;
         }
-        public void Push(string nombre, string apellido, string dpi, string partidan, string departamento)
+        public void Push(int edad, string municipio, string departamento, string hora, string fecha)
         {
             NodoCola auxiliar2 = new NodoCola
             {
-                Nombre = nombre,
-                Apellido = apellido,
-                Dpi = dpi,
-                PartidaN = partidan,
+               Edad =edad, 
+               Municipio = municipio,
                 Departamento = departamento,
+                Hora = hora,
+                Fecha = fecha,
                 Sgte = null
             };
             if (Vacio(primero))
@@ -56,9 +58,9 @@ namespace Estructuras
             return (primero == null) ? true : false; //para verificar si el primero de la cola existe o no  o si tiene un valor verdadero o falso
             throw new NotImplementedException();
         }
-        public void Heap(string nombre, string apellido, string dpi, string partidan, string departamento, Cola nueva)
+        public  NodoCola Heap(int edad,  string departamento, string municipio, string hora, string fecha, Cola nueva)
         {
-            Push(nombre, apellido, dpi, partidan, departamento);
+            Push(edad, departamento, municipio,hora,fecha);
             Cola nvacola = new Cola();
            // NodoCola ultimo;
             while (nueva.primero.Sgte !=null)
@@ -66,13 +68,14 @@ namespace Estructuras
                 if (nueva.primero.Sgte !=null)
                 {
                     NodoCola auxiliares;
-                    auxiliares = nueva.pop();
-                    nvacola.Push(auxiliares.Nombre, auxiliares.Apellido, auxiliares.Dpi, auxiliares.PartidaN, auxiliares.Departamento);
+                    auxiliares = nueva.Pop();
+                    nvacola.Push(auxiliares.Edad, auxiliares.Municipio, auxiliares.Departamento, auxiliares.Hora, auxiliares.Fecha);
 
                 }
             }
+            return Heap();
         }
-       public NodoCola MaxHeap(int [] t, int n, int posicion)   //verificando hacia que lado del arbol se ira el indice de el paciente
+       public static NodoCola MaxHeap(int [] t, int n, int posicion)   //verificando hacia que lado del arbol se ira el indice de el paciente
        {
             int izquierda = ((posicion + 1) * 2) - 1;
             int derecha = ((posicion + 1) * 2);
@@ -115,6 +118,55 @@ namespace Estructuras
                 tam--;
                 MaxHeap(arreglo, tam, 0);
             }
+        }
+
+        public static NodoCola Mostrar(List<Enfermosinfo>[] listaenf)
+        {
+            for (int i = 0; i < listaenf.Length; i++)
+            {
+                Console.WriteLine("{0}", listaenf[i]);
+                Console.ReadLine(); 
+            }
+            throw new NotImplementedException();
+        }
+
+        public static NodoCola Mostrar()
+        {
+            throw new NotImplementedException();
+        }
+
+        public static NodoCola MaxHeap()
+        {
+            throw new NotImplementedException();
+        }
+
+        public static NodoCola Heap()
+        {
+            throw new NotImplementedException();
+        }
+
+        //public static NodoCola HeapSort(List<Enfermosinfo>[] enfermos)
+        //{
+        //    int tam = enfermos.Length;
+        //    for (int i = (tam - 1) / 2; i >= 0; i--)
+        //    {
+        //        MaxHeap(enfermos, tam, i);
+        //    }
+        //    for (int j = enfermos.Length - 1; j > 0; j--)
+        //    {
+        //        int temporal = enfermos[j];
+        //        enfermos[j] = enfermos[0];
+        //        enfermos[0] = temporal;
+        //        tam--;
+        //        MaxHeap(enfermos, tam, 0);
+        //    }
+        //   // return MaxHeap(enfermos)
+        //}
+
+        public static NodoCola HeapSort()
+        { 
+            
+            throw new NotImplementedException();
         }
     }
 }
